@@ -60,11 +60,15 @@ reddit = praw.Reddit(
 	user_agent = USER_AGENT,
 	username = USERNAME,
 	password = PASSWORD)
+print(reddit.user.me())
+print("successfully set up reddit")
 
 def fetch(stop):
     print(f"Fetching new posts at {time.asctime()}.")
     subreddit = reddit.subreddit('memes')
+    print("set subreddit to r/memes")
     hot_posts = list(subreddit.hot(limit=100))
+    print(hot_posts)
     for posts in tqdm.tqdm(range(len(hot_posts)-1), desc = "Fetching posts..."):
         global current_meme
         current_meme = hot_posts[posts]
