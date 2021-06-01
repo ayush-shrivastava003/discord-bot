@@ -56,9 +56,9 @@ reddit = praw.Reddit(
 	password = PASSWORD)
 
 def fetch(stop):
+    print(f"Fetching new posts at {time.asctime()}.")
     subreddit = reddit.subreddit('memes')
     hot_posts = list(subreddit.hot(limit=100))
-    print(len(hot_posts))
     for posts in tqdm.tqdm(range(len(hot_posts)-1), desc = "Fetching posts..."):
         global current_meme
         current_meme = hot_posts[posts]
@@ -78,7 +78,6 @@ def fetch(stop):
     if not stop.is_set():
         # 28800 seconnds is 8 hours
         threads.append(threading.Timer(28800, fetch, [stop]).start())
-        print("We're going to fetch new posts now.")
 
 
 stop = threading.Event()
@@ -126,7 +125,7 @@ async def on_message(msg):
 	        global current_meme
 	        try:
 	            await msg.channel.send(embed=embeds[current_meme])
-	            current_meme += 1            
+	            current_meme += 1
 
 	        except IndexError:
 	            current_meme = 0
@@ -136,5 +135,9 @@ async def on_message(msg):
         for thread in threads:
             thread.join()
         sys.exit()
+
+    except Exception as e:
+        print("something happened uh oh stinky poopoo" + e)
+        await msg.channel.send("something happened uh oh stinky poopoo" + e)
 
 client.run(TOKEN)
