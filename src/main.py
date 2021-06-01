@@ -41,11 +41,17 @@ with open(file, 'r') as config:
 		data.append(json.loads(line))
 	print(data)
 	TOKEN = data[0]["token"]
+	print("Our token is:" + TOKEN)
 	CLIENT_ID = data[0]["client_id"]
+	print("Our client id is:" + CLIENT_ID)
 	CLIENT_SECRET = data[0]["client_secret"]
+	print(CLIENT_SECRET)
 	USER_AGENT = data[0]["user_agent"]
+	print(USER_AGENT)
 	USERNAME = data[0]["username"]
+	print(USERNAME)
 	PASSWORD = data[0]["password"]
+	print(PASSWORD)
 	config.close()
 
 reddit = praw.Reddit(
