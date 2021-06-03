@@ -10,6 +10,7 @@ import os
 import json
 import tqdm
 import threading
+from discord import errors
 
 logging.basicConfig()
 logging.getLogger('discord')
@@ -39,19 +40,12 @@ with open(file, 'r') as config:
 	data = []
 	for line in config:
 		data.append(json.loads(line))
-	print(data)
 	TOKEN = data[0]["token"]
-	print("Our token is:" + TOKEN)
 	CLIENT_ID = data[0]["client_id"]
-	print("Our client id is:" + CLIENT_ID)
 	CLIENT_SECRET = data[0]["client_secret"]
-	print(CLIENT_SECRET)
 	USER_AGENT = data[0]["user_agent"]
-	print(USER_AGENT)
 	USERNAME = data[0]["username"]
-	print(USERNAME)
 	PASSWORD = data[0]["password"]
-	print(PASSWORD)
 	config.close()
 
 reddit = praw.Reddit(
@@ -60,7 +54,6 @@ reddit = praw.Reddit(
 	user_agent = USER_AGENT,
 	username = USERNAME,
 	password = PASSWORD)
-print(reddit.user.me())
 print("successfully set up reddit")
 
 def fetch(stop):
@@ -68,7 +61,6 @@ def fetch(stop):
     subreddit = reddit.subreddit('memes')
     print("set subreddit to r/memes")
     hot_posts = list(subreddit.hot(limit=100))
-    print(hot_posts)
     for posts in tqdm.tqdm(range(len(hot_posts)-1), desc = "Fetching posts..."):
         global current_meme
         current_meme = hot_posts[posts]
@@ -82,6 +74,7 @@ def fetch(stop):
             embeds.append(embed)
 
         else:
+            print("sticky")
             hot_posts.remove(current_meme)
     current_meme = 0
 
@@ -93,7 +86,6 @@ def fetch(stop):
 stop = threading.Event()
 start = time.time()
 fetch(stop)
-print("fetched all 100 posts.")
 end = time.time()
 print(f'Fetched all posts in {end-start} seconds.')
 
@@ -146,8 +138,8 @@ async def on_message(msg):
             thread.join()
         sys.exit()
 
-    except Exception as e:
-        print("something happened uh oh stinky poopoo" + e)
-        await msg.channel.send("something happened uh oh stinky poopoo" + e)
+    except errors.Forbidden:
+        print("Can't send a message in chat, so we will DM the user.")
+        await msg.author.send("Hey, it looks like you tried to send a message in a channel that I'm not permitted in! Next time, make sure to go to another channel :)")
 
 client.run(TOKEN)
