@@ -10,7 +10,7 @@ import os
 import json
 import tqdm
 import threading
-from discord import errors
+from discord import DiscordException
 
 logging.basicConfig()
 logging.getLogger('discord')
@@ -21,6 +21,7 @@ GreetList = ['Greetings!', 'Hello!', 'Hi!', 'Hey!']
 version = '0.94'
 prefix = '.'
 embeds = []
+hot_posts = []
 current_meme = 0
 
 path = os.path.normpath(__file__ + os.sep + os.pardir + os.sep + os.pardir + os.sep + 'res')
@@ -57,12 +58,14 @@ reddit = praw.Reddit(
 print("successfully set up reddit")
 
 def fetch(stop):
+    global current_meme
+    global embeds
+    global hot_posts
     print(f"Fetching new posts at {time.asctime()}.")
     subreddit = reddit.subreddit('memes')
     print("set subreddit to r/memes")
-    hot_posts = list(subreddit.hot(limit=100))
+    hot_posts = list(subreddit.hot(limit=101))
     for posts in tqdm.tqdm(range(len(hot_posts)-1), desc = "Fetching posts..."):
-        global current_meme
         current_meme = hot_posts[posts]
         if not current_meme.stickied and not current_meme.visited:
             embed = discord.Embed(
@@ -133,13 +136,22 @@ async def on_message(msg):
 	            current_meme = 0
 	            await msg.channel.send("out of memes lol")
 
+	    elif msg.content.startswith(prefix + 'util'):
+	       # await msg.channel.send(embeds)
+	      #  await msg.channel.send(hot_posts)
+	        await msg.channel.send("number of embeds: " + str(len(embeds)))
+	        await msg.channel.send("number of hot posts: " + str(len(hot_posts)))
+
+	    elif msg.content.startswith("stfu"):
+	        await msg.channel.send(f"{msg.author.mention} https://tenor.com/view/stfu-no-one-cares-gif-21262364")
+
     except KeyboardInterrupt:
         for thread in threads:
             thread.join()
         sys.exit()
 
-    except errors.Forbidden:
-        print("Can't send a message in chat, so we will DM the user.")
-        await msg.author.send("Hey, it looks like you tried to send a message in a channel that I'm not permitted in! Next time, make sure to go to another channel :)")
+    except discord.DiscordException as e:
+        print("something happened uh oh stinky poopoo" +  str(e))
+        await msg.author.send("something happened uh oh stiny poopoo: " + str(e))
 
 client.run(TOKEN)
