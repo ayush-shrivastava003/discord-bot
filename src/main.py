@@ -1,7 +1,3 @@
-#a simple bot using the discord api
-import sys
-
-sys.path.append("modules/")
 from discordBotModules import discordBotFunctions
 from utilityFunctions import botUtilityFunctions
 
