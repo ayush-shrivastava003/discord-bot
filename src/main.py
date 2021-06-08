@@ -23,6 +23,7 @@ prefix = '.'
 embeds = []
 hot_posts = []
 current_meme = 0
+timeLastRefreshed = None
 
 path = os.path.normpath(__file__ + os.sep + os.pardir + os.sep + os.pardir + os.sep + 'res')
 os.makedirs(path, exist_ok=True)
@@ -55,16 +56,19 @@ reddit = praw.Reddit(
 	user_agent = USER_AGENT,
 	username = USERNAME,
 	password = PASSWORD)
-print("successfully set up reddit")
 
 def fetch(stop):
     global current_meme
     global embeds
     global hot_posts
-    print(f"Fetching new posts at {time.asctime()}.")
+    global timeLastRefreshed
+
+    timeLastRefreshed = time.asctime()
+    print(f"Fetching new posts at {timeLastRefreshed}.")
+    embeds = []
     subreddit = reddit.subreddit('memes')
-    print("set subreddit to r/memes")
     hot_posts = list(subreddit.hot(limit=101))
+
     for posts in tqdm.tqdm(range(len(hot_posts)-1), desc = "Fetching posts..."):
         current_meme = hot_posts[posts]
         if not current_meme.stickied and not current_meme.visited:
@@ -141,6 +145,7 @@ async def on_message(msg):
 	      #  await msg.channel.send(hot_posts)
 	        await msg.channel.send("number of embeds: " + str(len(embeds)))
 	        await msg.channel.send("number of hot posts: " + str(len(hot_posts)))
+	        await msg.channel.send("last refreshed: " + timeLastRefreshed)
 
 	    elif msg.content.startswith("stfu"):
 	        await msg.channel.send(f"{msg.author.mention} https://tenor.com/view/stfu-no-one-cares-gif-21262364")
