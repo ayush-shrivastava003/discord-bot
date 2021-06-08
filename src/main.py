@@ -67,6 +67,6 @@ async def on_message(msg):
 		sys.exit()
 
 	except discord.DiscordException as e:
-        await msg.author.send(botUtility.errorOccured(msg.author, e)) #prints error message and sends one to the user that caused the error
+		await msg.author.send(botUtility.errorOccured(msg.author, e)) #prints error message and sends one to the user that caused the error
 
 client.run(JSONContent["token"])
