@@ -1,5 +1,5 @@
-from discordBotModules import discordBotFunctions
-from utilityFunctions import botUtilityFunctions
+import discordBotModules
+import utilityFunctions
 
 try:
 	import discord
@@ -9,8 +9,9 @@ try:
 except ModuleNotFoundError: #user has not installed required dependencies
 	discordBotModules.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm'])
 
+prefix = '.'
 client = discord.Client()
-botUtility = discordBotModules.botUtilityFunctions()
+botUtility = utilityFunctions.botUtilityFunctions()
 JSONContent = botUtility.retrieveJSONContent()
 reddit = praw.Reddit(
 	client_id = JSONContent["client_id"],
@@ -19,7 +20,7 @@ reddit = praw.Reddit(
 	username = JSONContent["username"],
 	password = JSONContent["password"])
 
-botFunctions = discordBotModules.discordBotFunctions(reddit)
+botFunctions = discordBotModules.discordBotFunctions(reddit, discord)
 botFunctions.startup()
 
 @client.event

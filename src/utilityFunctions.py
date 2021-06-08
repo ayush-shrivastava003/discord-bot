@@ -1,4 +1,5 @@
 import json
+import os
 
 class botUtilityFunctions():
     def __init__(self):
@@ -16,7 +17,9 @@ class botUtilityFunctions():
 
         Note that this file is in .gitignore, but the file is created automatically. You will have to include the information yourself, however.
         """
-        file = '../res/config.json'
+        path = os.path.normpath(__file__ + os.sep + os.pardir + os.sep + os.pardir + os.sep + 'res')
+        os.makedirs(path, exist_ok=True)
+        file = path + os.sep + 'config.json'
 
         try:
             fetchedPosts = open(file, 'r')

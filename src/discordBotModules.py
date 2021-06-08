@@ -3,50 +3,51 @@ import random
 import googlesearch
 import threading
 import os
+import tqdm
 
 class discordBotFunctions():
-    def __init__(self, reddit):
+    def __init__(self, reddit, discord):
         self.GreetList = ['Greetings!', 'Hello!', 'Hi!', 'Hey!']
         self.version = '0.94'
-        self.prefix = '.'
         self.embeds = []
         self.hot_posts = []
         self.current_meme = None
         self.timeLastRefreshed = None
-        self.threads = threads
+        self.threads = []
         self.reddit = reddit
+        self.discord = discord
 
     def fetch(self, stop):
         """
         Fetches new posts from Reddit. Reschedules using threading.Timer object.
         """
         self.timeLastRefreshed = time.asctime()
-        print(f"Fetching new posts at {timeLastRefreshed}.")
+        print(f"Fetching new posts at {self.timeLastRefreshed}.")
         self.embeds = [] #clear any embeds from before
         subreddit = self.reddit.subreddit('memes')
         self.hot_posts = list(subreddit.hot(limit=101)) #retrieves posts from reddit and puts them in a list
 
         for posts in tqdm.tqdm(range(len(self.hot_posts)-1), desc = "Fetching posts..."): #not sure why i have to subtract one post but the program crashes if i don't
-            self.current_meme = hot_posts[posts]
-            if not current_meme.stickied:
+            self.current_meme = self.hot_posts[posts]
+            if not self.current_meme.stickied:
                 #creates embed to be used on discord
-                embed = discord.Embed(
-                    title = current_meme.title,
-                    url = current_meme.name
+                embed = self.discord.Embed(
+                    title = self.current_meme.title,
+                    url = self.current_meme.name
                 )
-                embed.set_image(url = current_meme.url)
-                embed.set_footer(text = f'{current_meme.score} ⬆️ | {len(current_meme.comments)} 💬')
-                embeds.append(embed)
+                embed.set_image(url = self.current_meme.url)
+                embed.set_footer(text = f'{self.current_meme.score} ⬆️ | {len(self.current_meme.comments)} 💬')
+                self.embeds.append(embed)
 
             else:
                 print("sticky") #post was pinned by r/memes mods, and not an actual post
-                hot_posts.remove(current_meme)
+                self.hot_posts.remove(self.current_meme)
 
-        current_meme = 0
+        self.current_meme = 0
 
         if not stop.is_set():
             # 28800 seconnds is 8 hours
-            threads.append(threading.Timer(28800, fetch, [stop]).start()) #set a timer for 8 hours to refresh the posts
+            self.threads.append(threading.Timer(28800, self.fetch, [stop]).start()) #set a timer for 8 hours to refresh the posts
 
     def help(self):
         """
@@ -105,6 +106,6 @@ class discordBotFunctions():
         """
         stop = threading.Event()
         start = time.time()
-        self.fetch()
+        self.fetch(stop)
         end = time.time()
         print(f"Fetched all posts in {end-start} seconds.")
