@@ -49,7 +49,8 @@ async def on_message(msg):
 			await msg.channel.send(returnedResults[1])
 
 		elif msg.content.startswith(prefix + 'reddit'): #.reddit on discord
-			await msg.channel.send(embed=botFunctions.reddit())
+			embed = botFunctions.reddit()
+			await msg.channel.send(embed=embed)
 
 		elif msg.content.startswith(prefix + 'util'): #.util on discord
 			await msg.channel.send(botFunctions.util())

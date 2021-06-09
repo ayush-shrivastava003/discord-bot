@@ -8,6 +8,7 @@ import tqdm
 class discordBotFunctions():
     def __init__(self, reddit, discord):
         self.GreetList = ['Greetings!', 'Hello!', 'Hi!', 'Hey!']
+        self.prefix = '.'
         self.version = '0.94'
         self.embeds = []
         self.hot_posts = []
@@ -53,25 +54,25 @@ class discordBotFunctions():
         """
         Returns a list of commands for the bot.
         """
-        print(f'{time.asctime()}: We received "{prefix}help" command!')
+        print(f'{time.asctime()}: We received "{self.prefix}help" command!')
         return f'''Commands for version `{version}`:
-        **{prefix}help** - sends this list of commands
-        **{prefix}greet** - says hello
-        **{prefix}search** - finds and retrieves ten urls based on your search query
-        **{prefix}reddit** - gets a meme from r/memes on Reddit'''
+        **{self.prefix}help** - sends this list of commands
+        **{self.prefix}greet** - says hello
+        **{self.prefix}search** - finds and retrieves ten urls based on your search query
+        **{self.prefix}reddit** - gets a meme from r/memes on Reddit'''
 
     def greet(self):
         """
         Greets the user with a random message.
         """
-        print(f'{time.asctime()}: We received the "{prefix}greet" command!')
+        print(f'{time.asctime()}: We received the "{self.prefix}greet" command!')
         return self.GreetList[random.randrange(0, 4, 1)] #randomly select a greeting message
 
     def search(self, query):
         """
         Searches Google with the user's query. Returns a list with the first ten results.
         """
-        print(f'{time.asctime()}: We received the "{prefix}search" command!')
+        print(f'{time.asctime()}: We received the "{self.prefix}search" command!')
         for search_results in googlesearch.search(query, tld="com", num=10, stop=10, pause=2):
             fetchedURLS.append(search_results) #add all ten search results to the to-be-returned list
 
@@ -82,7 +83,7 @@ class discordBotFunctions():
         Returns a Reddit post in the form of a Discord embed.
         """   
         try:
-            return embeds[self.current_meme]
+            return self.embeds[self.current_meme]
             self.current_meme += 1
 
         except IndexError:
