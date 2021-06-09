@@ -55,7 +55,7 @@ class discordBotFunctions():
         Returns a list of commands for the bot.
         """
         print(f'{time.asctime()}: We received "{self.prefix}help" command!')
-        return f'''Commands for version `{version}`:
+        return f'''Commands for version `{self.version}`:
         **{self.prefix}help** - sends this list of commands
         **{self.prefix}greet** - says hello
         **{self.prefix}search** - finds and retrieves ten urls based on your search query
