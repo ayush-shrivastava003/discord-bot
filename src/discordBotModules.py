@@ -15,7 +15,7 @@ class discordBotFunctions():
         self.current_meme = None
         self.timeLastRefreshed = None
         self.threads = []
-        self.reddit = reddit
+        self.redditObj = reddit
         self.discord = discord
 
     def fetch(self, stop):
@@ -25,7 +25,7 @@ class discordBotFunctions():
         self.timeLastRefreshed = time.asctime()
         print(f"Fetching new posts at {self.timeLastRefreshed}.")
         self.embeds = [] #clear any embeds from before
-        subreddit = self.reddit.subreddit('memes')
+        subreddit = self.redditObj.subreddit('memes')
         self.hot_posts = list(subreddit.hot(limit=101)) #retrieves posts from reddit and puts them in a list
 
         for posts in tqdm.tqdm(range(len(self.hot_posts)-1), desc = "Fetching posts..."): #not sure why i have to subtract one post but the program crashes if i don't
