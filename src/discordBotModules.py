@@ -80,14 +80,13 @@ class discordBotFunctions():
     def reddit(self):
         """
         Returns a Reddit post in the form of a Discord embed.
-        """
-        global current_meme
+        """   
         try:
-            return embeds[current_meme]
-            current_meme += 1
+            return embeds[self.current_meme]
+            self.current_meme += 1
 
         except IndexError:
-            current_meme = 0
+            self.current_meme = 0
             return "out of memes lol"
 
     def util(self):
