@@ -34,7 +34,7 @@ class discordBotFunctions():
                 #creates embed to be used on discord
                 embed = self.discord.Embed(
                     title = self.current_meme.title,
-                    url = self.current_meme.name
+                    url = f"https://reddit.com/{self.current_meme.id}"
                 )
                 embed.set_image(url = self.current_meme.url)
                 embed.set_footer(text = f'{self.current_meme.score} ⬆️ | {len(self.current_meme.comments)} 💬')
@@ -44,7 +44,7 @@ class discordBotFunctions():
                 print("sticky") #post was pinned by r/memes mods, and not an actual post
                 self.hot_posts.remove(self.current_meme)
 
-        self.current_meme = 0
+        self.current_meme = 0-1
 
         if not stop.is_set():
             # 28800 seconnds is 8 hours
@@ -72,6 +72,7 @@ class discordBotFunctions():
         """
         Searches Google with the user's query. Returns a list with the first ten results.
         """
+        fetchedURLS = []
         print(f'{time.asctime()}: We received the "{self.prefix}search" command!')
         for search_results in googlesearch.search(query, tld="com", num=10, stop=10, pause=2):
             fetchedURLS.append(search_results) #add all ten search results to the to-be-returned list
@@ -83,8 +84,8 @@ class discordBotFunctions():
         Returns a Reddit post in the form of a Discord embed.
         """   
         try:
-            return self.embeds[self.current_meme]
             self.current_meme += 1
+            return self.embeds[self.current_meme]
 
         except IndexError:
             self.current_meme = 0
