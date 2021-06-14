@@ -1,5 +1,6 @@
 
-res/config.json
+res/
 src/__pycache__/utilityFunctions.cpython-39.pyc
 src/__pycache__/discordBotModules.cpython-39.pyc
 src/__pycache__
+.google-cookie

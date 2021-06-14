@@ -4,6 +4,7 @@ import googlesearch
 import threading
 import os
 import tqdm
+import utilityFunctions
 
 class discordBotFunctions():
     def __init__(self, reddit, discord):
@@ -11,12 +12,13 @@ class discordBotFunctions():
         self.prefix = '.'
         self.version = '0.94'
         self.embeds = []
-        self.hot_posts = []
-        self.current_meme = None
+        self.submissions = []
+        self.post = None
         self.timeLastRefreshed = None
         self.threads = []
         self.redditObj = reddit
         self.discord = discord
+        self.utilFuncs = utilityFunctions.botUtilityFunctions()
 
     def fetch(self, stop):
         """
@@ -26,29 +28,28 @@ class discordBotFunctions():
         print(f"Fetching new posts at {self.timeLastRefreshed}.")
         self.embeds = [] #clear any embeds from before
         subreddit = self.redditObj.subreddit('memes')
-        self.hot_posts = list(subreddit.hot(limit=101)) #retrieves posts from reddit and puts them in a list
+        self.submissions = list(subreddit.hot(limit=101)) #retrieves posts from reddit and puts them in a list
 
-        for posts in tqdm.tqdm(range(len(self.hot_posts)-1), desc = "Fetching posts..."): #not sure why i have to subtract one post but the program crashes if i don't
-            self.current_meme = self.hot_posts[posts]
-            if not self.current_meme.stickied:
-                #creates embed to be used on discord
-                embed = self.discord.Embed(
-                    title = self.current_meme.title,
-                    url = f"https://reddit.com/{self.current_meme.id}"
-                )
-                embed.set_image(url = self.current_meme.url)
-                embed.set_footer(text = f'{self.current_meme.score} ⬆️ | {len(self.current_meme.comments)} 💬')
-                self.embeds.append(embed)
+        for posts in self.submissions:
+            if posts.stickied or "v.redd.it" in posts.url: #removing all pinned posts or non-gifs/images before constructing embeds to prevent index errors
+                self.submissions.remove(posts)
 
-            else:
-                print("sticky") #post was pinned by r/memes mods, and not an actual post
-                self.hot_posts.remove(self.current_meme)
+        for posts in tqdm.tqdm(range(len(self.submissions)), desc = "Fetching posts..."):
+            self.post = self.submissions[posts]
+            #creates embed to be used on discord
+            embed = self.discord.Embed(
+                title = self.post.title,
+                url = f"https://reddit.com/{self.post.id}"
+            )
+            embed.set_image(url = self.post.url)
+            embed.set_footer(text = f'{self.post.score} ⬆️ | {len(self.post.comments)} 💬')
+            self.embeds.append(embed)
 
-        self.current_meme = 0-1
+        self.post = 0
+
 
         if not stop.is_set():
-            # 28800 seconnds is 8 hours
-            self.threads.append(threading.Timer(28800, self.fetch, [stop]).start()) #set a timer for 8 hours to refresh the posts
+            self.threads.append(threading.Timer(self.utilFuncs.getNextRefreshTime(), self.fetch, [stop]).start()) #set a timer for 8 hours to refresh the posts
 
     def help(self):
         """
@@ -84,11 +85,11 @@ class discordBotFunctions():
         Returns a Reddit post in the form of a Discord embed.
         """   
         try:
-            self.current_meme += 1
-            return self.embeds[self.current_meme]
+            self.post += 1
+            return self.embeds[self.post]
 
         except IndexError:
-            self.current_meme = 0
+            self.post = 0
             return "out of memes lol"
 
     def util(self):
@@ -98,7 +99,7 @@ class discordBotFunctions():
         Returns a string containing the number of embeds, hot posts, and the time the posts were last refreshed.
         """
         return f'''{len(self.embeds)} embeds
-    {len(self.hot_posts)} hot posts
+    {len(self.submissions)} hot posts
     last refreshed @ {self.timeLastRefreshed}'''
 
     def startup(self):
