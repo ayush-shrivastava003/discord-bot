@@ -4,7 +4,9 @@ import time
 
 class botUtilityFunctions():
     def __init__(self):
-        pass
+        path = os.path.normpath(__file__ + os.sep + os.pardir + os.sep + os.pardir + os.sep + 'res')
+        os.makedirs(path, exist_ok=True)
+        self.file = path + os.sep + 'config.json'
 
     def retrieveJSONContent(self):
         """
@@ -18,17 +20,13 @@ class botUtilityFunctions():
 
         Note that this file is in .gitignore, but the file is created automatically. You will have to include the information yourself, however.
         """
-        path = os.path.normpath(__file__ + os.sep + os.pardir + os.sep + os.pardir + os.sep + 'res')
-        os.makedirs(path, exist_ok=True)
-        file = path + os.sep + 'config.json'
-
         try:
-            fetchedPosts = open(file, 'r')
+            fetchedPosts = open(self.file, 'r')
         except FileNotFoundError:
-            fetchedPosts = open(file, 'w+') #gotta make a file if there wasn't one already
-            raise EmptyJSONFileError(f'''There was no JSON file found at "{file}", or there were no contents in it. Please create or move a file there and include:
+            fetchedPosts = open(self.file, 'w+') #gotta make a file if there wasn't one already
+            raise EmptyJSONFileError(f'''There was no JSON file found at "{self.file}", or there were no contents in it. Please create or move a file there and include:
             The token for your discord bot (https://discord.com/developers/applications/your-app-id-here/bot)
-            The ID of your reddit bot (https://old.reddit.com/prefs/)
+            The ID of your reddit bot (https://old.reddit.com/prefs/apps)
             The secret for your reddit bot (same URL as above)
             Your reddit username
             Your reddit password
@@ -39,7 +37,7 @@ class botUtilityFunctions():
         char = fetchedPosts.read(1) #check if there even was anything in the file
         fetchedPosts.close()
 
-        with open(file, 'r') as config:
+        with open(self.file, 'r') as config:
             data = []
             for line in config:
                 data.append(json.loads(line))
@@ -64,9 +62,9 @@ class botUtilityFunctions():
         """
         print(f"ERROR @ {time.asctime()}: {author} caused {str(errorMessage)}")
         return f'''Something went wrong! Here's the full error message:
-            `{str(errorMessage)}`\n
-            Please submit a bug report here if you're unsure of how to fix the problem: https://forms.gle/owaquH8JPGzhM1DJ6
-            GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki'''
+        `{str(errorMessage)}`\n
+    Please submit a bug report here if you're unsure of how to fix the problem: https://forms.gle/owaquH8JPGzhM1DJ6
+    GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki'''
 
 class EmptyJSONFileError(Exception):
     pass

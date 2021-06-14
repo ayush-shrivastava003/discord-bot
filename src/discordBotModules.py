@@ -7,7 +7,7 @@ import tqdm
 
 class discordBotFunctions():
     def __init__(self, reddit, discord):
-        self.GreetList = ['Greetings!', 'Hello!', 'Hi!', 'Hey!']
+        self.GreetList = [' Greetings!', ' Hello!', ' Hi!', ' Hey!']
         self.prefix = '.'
         self.version = '0.94'
         self.embeds = []
@@ -98,8 +98,8 @@ class discordBotFunctions():
         Returns a string containing the number of embeds, hot posts, and the time the posts were last refreshed.
         """
         return f'''{len(self.embeds)} embeds
-        {len(self.hot_posts)} hot posts
-        last refreshed @ {self.timeLastRefreshed}'''
+    {len(self.hot_posts)} hot posts
+    last refreshed @ {self.timeLastRefreshed}'''
 
     def startup(self):
         """
