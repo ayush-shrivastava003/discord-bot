@@ -19,7 +19,7 @@ class botUtilityFunctions():
         self.week = self.day*7
         self.year = self.week*52
 
-        self.refreshHour = 20
+        self.refreshHour = 0
 
     def retrieveJSONContent(self):
         """
@@ -45,7 +45,7 @@ class botUtilityFunctions():
             Your reddit password
             
             Until then this bot will not be able to function.
-            More information: https://github.com/moistpotato9873/moistpotatos-bot/wiki''')
+            More information: https://github.com/moistpotato9873/moistpotatos-bot/wiki#developers---setting-up-the-bot''')
 
         char = fetchedPosts.read(1) #check if there even was anything in the file
         fetchedPosts.close()
@@ -77,7 +77,7 @@ class botUtilityFunctions():
         return f'''Something went wrong! Here's the full error message:
         `{str(errorMessage)}`\n
 Please submit a bug report here if you're unsure of how to fix the problem: https://forms.gle/owaquH8JPGzhM1DJ6
-GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki'''
+GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki/#faq'''
 
     # def getHours(self):
     #     """
@@ -132,6 +132,10 @@ GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/w
         timeToNextRefresh = execTime-now
         print("Scheduled to refresh at " + str(timeToNextRefresh))
         self.refreshHour += 8
+
+        if self.refreshHour == 24:
+            self.refreshHour = 0
+
         return timeToNextRefresh
 
 
