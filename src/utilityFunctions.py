@@ -48,7 +48,11 @@ class botUtilityFunctions():
                 data.append(json.loads(line))
             config.close()
 
-        return data[0]
+        try:
+            return data[0]
+        
+        except IndexError:
+            raise emptyJSONFileError()
 
     def installDependencies(self, modules):
         """
