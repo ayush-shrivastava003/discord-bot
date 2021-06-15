@@ -73,7 +73,7 @@ class botUtilityFunctions():
         return f'''Something went wrong! Here's the full error message:
         `{str(errorMessage)}`\n
 Please submit a bug report here if you're unsure of how to fix the problem: https://forms.gle/owaquH8JPGzhM1DJ6
-GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki'''
+GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki#developers---setting-up-the-bot'''
 
     # def getHours(self):
     #     """

@@ -1,3 +1,7 @@
+# This code was made by moistpotato9873 on GitHub!
+# Check out the original code at https://github.com/moistpotato9873/moistpotatos-bot
+# The modified code's repository can be found at [your repo link]
+
 import utilityFunctions
 #import workFunctions
 
