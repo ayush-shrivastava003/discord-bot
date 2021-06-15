@@ -52,7 +52,7 @@ class botUtilityFunctions():
             return data[0]
         
         except IndexError:
-            raise emptyJSONFileError()
+            raise EmptyJSONFileError()
 
     def installDependencies(self, modules):
         """
