@@ -1,8 +1,3 @@
-# This code was originally made by moistpotato9873 on GitHub!
-# Check it out at https://github.com/moistpotato9873/moistpotatos-bot/.
-# Any modifications to this code can be found at [your repo link].
-# More updates will be coming soon :)
-
 import discordBotModules
 import utilityFunctions
 #import workFunctions
