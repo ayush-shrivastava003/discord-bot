@@ -37,7 +37,7 @@ class botUtilityFunctions():
             fetchedPosts = open(self.file, 'r')
         except FileNotFoundError:
             fetchedPosts = open(self.file, 'w+') #gotta make a file if there wasn't one already
-            raise EmptyJSONFileError()
+            raise EmptyJSONFileError(self.file)
 
         char = fetchedPosts.read(1) #check if there even was anything in the file
         fetchedPosts.close()
@@ -129,7 +129,9 @@ GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/w
 
 
 class EmptyJSONFileError(Exception):
-    print(f'''There was no JSON file found at "{self.file}", or there were no contents in it. Please create or move a file there and include:
+    def __init__(self, filePath):
+        self.file = filePath
+        print(f'''There was no JSON file found at "{self.file}", or there were no contents in it. Please create or move a file there and include:
             The token for your discord bot (https://discord.com/developers/applications/your-app-id-here/bot)
             The ID of your reddit bot (https://old.reddit.com/prefs/apps)
             The secret for your reddit bot (same URL as above)
