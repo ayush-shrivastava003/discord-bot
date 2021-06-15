@@ -1,4 +1,3 @@
-import discordBotModules
 import utilityFunctions
 #import workFunctions
 
@@ -6,9 +5,13 @@ try:
 	import discord
 	import praw
 	import tqdm
+	import beautifulsoup4
+	import googlesearch
 
 except ModuleNotFoundError: #user has not installed required dependencies
-	discordBotModules.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm'])
+	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm', 'beautifulsoup4', 'google'])
+
+import discordBotModules
 
 prefix = '.'
 client = discord.Client()
