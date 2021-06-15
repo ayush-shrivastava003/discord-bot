@@ -6,7 +6,7 @@ try:
 	import praw
 	import tqdm
 	import beautifulsoup4
-	import google
+	import googlesearch
 
 except ModuleNotFoundError: #user has not installed required dependencies
 	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm', 'beautifulsoup4', 'google'])
