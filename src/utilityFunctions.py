@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import sys
 from datetime import datetime
 
 class botUtilityFunctions():
@@ -59,9 +60,16 @@ class botUtilityFunctions():
         Installs required dependencies.
         """
         print('Installing needed modules...')
+
+        if sys.platform == 'win32':
+            name = 'python3'
+        
+        else:
+            name = 'py'
+
         for module in modules:
             print(f'Installing {module}...')
-            os.system(f'python3 -m pip install {module} -q')
+            os.system(f'py -m pip install {module} -q')
 
     def errorOccured(self, author, errorMessage):
         """
