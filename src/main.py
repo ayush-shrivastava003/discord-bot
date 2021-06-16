@@ -2,20 +2,18 @@
 # Check out the original code at https://github.com/moistpotato9873/moistpotatos-bot
 # The modified code's repository can be found at [your repo link]
 
-import utilityFunctions
+import utilityFunctions # utilityFunctions has no dependencies so we can import that first
 #import workFunctions
 
 try:
 	import discord
 	import praw
 	import tqdm
-	import googlesearch
+	import discordBotModules # this imports googlesearch on its end. googlesearch is never used here so there's no need to import it, but it is used for the module
 
-except ImportError as e: # user has not installed required dependencies
+except ImportError as e: # one of the modules above hasn't been installed
 	print(e)
-	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm', 'beautifulsoup4', 'google'])
-
-import discordBotModules
+	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm', 'beautifulsoup4', 'google']) # beautifulsoup4 is a dependency for google
 
 prefix = '.'
 client = discord.Client()
@@ -29,8 +27,8 @@ reddit = praw.Reddit(
 	username = JSONContent["username"],
 	password = JSONContent["password"])
 
-botFunctions = discordBotModules.discordBotFunctions(reddit, discord)
-botFunctions.startup()
+botFunctions = discordBotModules.discordBotFunctions(reddit, discord) # pass in our reddit and discord objects in order to use discordBotModules' methods
+botFunctions.startup() # like this one
 
 @client.event
 async def on_ready():

@@ -123,7 +123,7 @@ You can get your bot's ID under the general information tab for your application
 
 * Am I allowed to use this code?
 
-Yes! You may use this code however you'd like ([MIT License](https://mit-license.org/)):)
+Yes! You may use this code however you'd like ([MIT License](https://mit-license.org/)) :)
 
 * How do I use this bot?
 
@@ -140,11 +140,11 @@ If the bot is being buggy, or DMed you about an error, you can make an issue on 
 
 * How do I invite the bot/share it with others?
 
-The invite link can be found [here](https://discord.com/oauth2/authorize?client_id=806934438738264114&scope=bot). I'd really appreciate it if you shared this repo with others :)
+The invite link can be found [here](https://discord.com/oauth2/authorize?client_id=806934438738264114&scope=bot).
 
 ## rules for use
 
-This repo is under the MIT License, so you can really do anything you'd like with this code. Here's the official lisence: 
+This repo is under the MIT License, so you can really do anything you'd like with this code. Here's the official lisence: https://mit-license.org/
 
 ## credits
 
