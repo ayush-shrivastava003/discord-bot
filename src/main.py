@@ -50,7 +50,9 @@ async def on_message(msg):
 
 		elif msg.content.startswith(prefix + 'search'): # .search {query} on discord
 			query = msg.content[8:]
-			await msg.channel.send(f'Finding ten URLS with the search query `{query}`')
+
+			if query is not "":
+				await msg.channel.send(f'Finding ten URLS with the search query `{query}`')
 			
 			returnedResults = botFunctions.search(query)
 			await msg.channel.send(returnedResults[0])

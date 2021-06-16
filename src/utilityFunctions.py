@@ -20,7 +20,7 @@ class botUtilityFunctions():
         self.week = self.day*7
         self.year = self.week*52
 
-        self.refreshHour = 24
+        self.refreshHour = 16
 
     def retrieveJSONContent(self):
         """
@@ -69,7 +69,7 @@ class botUtilityFunctions():
 
         for module in modules:
             print(f'Installing {module}...')
-            os.system(f'py -m pip install {module} -q')
+            os.system(f'{name} -m pip install {module} -q')
 
     def errorOccured(self, author, errorMessage):
         """
@@ -134,11 +134,13 @@ GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/w
         refreshHr = self.refreshHour*self.hour
         execTime = midnight+refreshHr
         timeToNextRefresh = execTime-now
-        print("Scheduled to refresh at " + str(timeToNextRefresh))
-        self.refreshHour += 8
+        nextRefreshHr = timeToNextRefresh / self.hour
+        print(f"Scheduled to refresh in {timeToNextRefresh} seconds ({nextRefreshHr} hours)")
 
         if self.refreshHour >= 24:
-            self.refreshHour == 0
+            self.refreshHour = 0
+
+        self.refreshHour += 8
 
         return timeToNextRefresh
 
