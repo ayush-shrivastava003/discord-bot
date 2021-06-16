@@ -18,13 +18,9 @@ This bot is designed with simplicity in mind. I'm definitely not the best progra
 
 **Note that this bot will require your reddit username and password to function. If you choose to upload your own version of this bot to GitHub, add `config.json` to `.gitignore.`**
 
-#### read over the rules
-
-Please read over the rules for using this first. You can use this bot template however you want, but I'd like some credit. Those rules will prevent my work from being taken without credit.
-
 #### download the latest release
 
-Once you've followed all the instructions in the rules section, download the latest release in the Releases section. This will let you get all the code without cloning the repo.
+Go to the Releases section on the home page of the repo. This will let you get all the code without cloning the repo.
 
 #### register new discord/reddit bots
 
@@ -127,7 +123,7 @@ You can get your bot's ID under the general information tab for your application
 
 * Am I allowed to use this code?
 
-Yes! You may use this code as long as you agree to the rules for use (including signing the form). Please keep the credits to this repo in the code :)
+Yes! You may use this code however you'd like ([MIT License](https://mit-license.org/)):)
 
 * How do I use this bot?
 
@@ -140,7 +136,7 @@ Here are all the current commands:
 
 * The bot is acting weirdly/DMed me. What should I do?
 
-If the bot is being buggy, or DMed you about an error, please submit a [bug report](https://forms.gle/owaquH8JPGzhM1DJ6). I'll send you an email telling you how to fix the problem.
+If the bot is being buggy, or DMed you about an error, you can make an issue on GitHub.
 
 * How do I invite the bot/share it with others?
 
@@ -148,13 +144,7 @@ The invite link can be found [here](https://discord.com/oauth2/authorize?client_
 
 ## rules for use
 
-This code can be used an modified, but I do have some rules if you're going to do so:
-
-1. You credit me and include this repo link in the help command, the error DM, your repo, etc.
-2. You will not use this code in any commercial setting.
-3. If you are modifying this code, it needs to be uploaded to a repo.
-4. I am not responsible for any damages or leaked personal info.
-5. You submit [this form](https://forms.gle/adpT1YSL6jGvTzuf9) telling me that you want to use my code.
+This repo is under the MIT License, so you can really do anything you'd like with this code. Here's the official lisence: 
 
 ## credits
 
