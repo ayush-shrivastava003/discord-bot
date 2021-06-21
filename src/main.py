@@ -3,17 +3,16 @@
 # The modified code's repository can be found at [your repo link]
 
 import utilityFunctions # utilityFunctions has no dependencies so we can import that first
-#import workFunctions
+import discordBotModules # if google is not installed, installDependencies will be called there
 
 try:
 	import discord
 	import praw
 	import tqdm
-	import discordBotModules # this imports googlesearch on its end. googlesearch is never used here so there's no need to import it, but it is used for the module
 
 except ImportError as e: # one of the modules above hasn't been installed
 	print(e)
-	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm', 'beautifulsoup4', 'google']) # beautifulsoup4 is a dependency for google
+	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm']) # beautifulsoup4 is a dependency for google
 
 prefix = '.'
 client = discord.Client()
@@ -49,12 +48,15 @@ async def on_message(msg):
 		elif msg.content.startswith(prefix + 'search'): # .search {query} on discord
 			query = msg.content[8:]
 
-			if query is not "":
+			if query != "":
 				await msg.channel.send(f'Finding ten URLS with the search query `{query}`')
 			
-			returnedResults = botFunctions.search(query)
-			await msg.channel.send(returnedResults[0])
-			await msg.channel.send(returnedResults[1])
+				returnedResults = botFunctions.search(query)
+				await msg.channel.send(returnedResults[0])
+				await msg.channel.send(returnedResults[1])
+
+			else:
+				await msg.channel.send("hey dummy you need a search query")
 
 		elif msg.content.startswith(prefix + 'reddit'): # .reddit on discord
 			embed = botFunctions.reddit()

@@ -1,16 +1,22 @@
 import time
 import random
-import googlesearch
 import threading
 import os
 import tqdm
 import utilityFunctions
+
+try:
+    import googlesearch
+
+except ImportError:
+    utilityFunctions.botUtilityFunctions().installDependencies(['beautifulsoup4', 'google'])
 
 class discordBotFunctions():
     def __init__(self, reddit, discord):
         self.GreetList = [' Greetings!', ' Hello!', ' Hi!', ' Hey!']
         self.prefix = '.'
         self.version = '0.94'
+        self.subreddits = ['memes', 'me_irl', 'dankmemes']
         self.embeds = []
         self.submissions = []
         self.post = None
@@ -27,23 +33,31 @@ class discordBotFunctions():
         self.timeLastRefreshed = time.asctime()
         print(f"Fetching new posts at {self.timeLastRefreshed}.")
         self.embeds = [] #clear any embeds from before
-        subreddit = self.redditObj.subreddit('memes')
-        self.submissions = list(subreddit.hot(limit=101)) #retrieves posts from reddit and puts them in a list
 
-        for posts in self.submissions:
-            if posts.stickied or "v.redd.it" in posts.url: #removing all pinned posts or non-gifs/images before constructing embeds to prevent index errors
-                self.submissions.remove(posts)
+        print("Fetching submissions...")
+        for i in tqdm.tqdm(range(len(self.subreddits)), desc="Fetching posts"):
+            subreddit = self.subreddits[i]
+            self.submissions.append(list(self.redditObj.subreddit(subreddit).hot(limit=100)))
 
-        for posts in tqdm.tqdm(range(len(self.submissions)), desc = "Fetching posts..."):
-            self.post = self.submissions[posts]
-            #creates embed to be used on discord
-            embed = self.discord.Embed(
-                title = self.post.title,
-                url = f"https://reddit.com/{self.post.id}"
-            )
-            embed.set_image(url = self.post.url)
-            embed.set_footer(text = f'{self.post.score} ⬆️ | {len(self.post.comments)} 💬')
-            self.embeds.append(embed)
+
+        for i in range(len(self.subreddits)):
+            print("Filtering submissions...")
+            for posts in self.submissions[i]:
+                if posts.stickied or "v.redd.it" in posts.url: #removing all pinned posts or non-gifs/images
+                    print("sticky")
+                    self.submissions[i].remove(posts)
+
+            print("Constructing embeds...")
+            for posts in tqdm.tqdm(range(len(self.submissions[i])), desc = f"Constructing embeds for {self.subreddits[i]}"):
+                self.post = self.submissions[i][posts]
+                #creates embed to be used on discord
+                embed = self.discord.Embed(
+                    title = self.post.title,
+                    url = f"https://reddit.com/{self.post.id}"
+                )
+                embed.set_image(url = self.post.url)
+                embed.set_footer(text = f'{self.post.score} ⬆️ | {len(self.post.comments)} 💬')
+                self.embeds.append(embed)
 
         self.post = 0
 
