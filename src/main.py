@@ -1,7 +1,7 @@
 # This code was made by moistpotato9873 on GitHub!
 # Check out the original code at https://github.com/moistpotato9873/moistpotatos-bot
 # The modified code's repository can be found at [your repo link]
-
+import sys
 import utilityFunctions # utilityFunctions has no dependencies so we can import that first
 import discordBotModules # if google is not installed, installDependencies will be called there
 
@@ -21,6 +21,7 @@ client = discord.Client()
 botUtility = utilityFunctions.botUtilityFunctions()
 # workFunctions = workFunctions.workFunctions()
 JSONContent = botUtility.retrieveJSONContent()
+user = JSONContent["user_id"]
 reddit = praw.Reddit(
 	client_id = JSONContent["client_id"],
 	client_secret = JSONContent["client_secret"],
@@ -69,11 +70,16 @@ async def on_message(msg):
 
 		elif msg.content.startswith("stfu"): # just type "stfu" on discord
 			await msg.channel.send(f"{msg.author.mention} https://tenor.com/view/stfu-no-one-cares-gif-21262364")
+
+		elif msg.content.startswith(prefix + "ping"):
+			await msg.channel.send(f":ping_pong: Pong! **{client.latency}ms**")
 			
 		elif msg.content.startswith(prefix + 'exit'):
-			await msg.channel.send("Are you sure you want to take down the bot? y/n")
+			await msg.channel.send("enter the file location for the bot to confirm")
 
-		elif msg.content.startswith('y'):
+		elif msg.content.startswith(__file__):
+			await msg.channel.send("bot shutting down...")
+			await user.send("bot got shut down LLLLL :clown:")
 			sys.exit()
 
 		# elif msg.content.startswith(prefix + "work"):

@@ -39,7 +39,9 @@ class botUtilityFunctions():
             fetchedPosts = open(self.file, 'r')
         except FileNotFoundError:
             fetchedPosts = open(self.file, 'w+') #gotta make a file if there wasn't one already
-            print(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
+
+            # more descriptive error msg
+            raise FileNotFoundError(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
             The token for your discord bot (https://discord.com/developers/applications/your-app-id-here/bot)
             The ID of your reddit bot (https://old.reddit.com/prefs/apps)
             The secret for your reddit bot (same URL as above)
@@ -48,7 +50,6 @@ class botUtilityFunctions():
 
             Until then this bot will not be able to function.
             More information: https://github.com/moistpotato9873/moistpotatos-bot/wiki#developers---setting-up-the-bot''')
-            sys.exit()
 
         char = fetchedPosts.read(1) #check if there even was anything in the file
         fetchedPosts.close()
@@ -63,7 +64,15 @@ class botUtilityFunctions():
             return data[0]
         
         except IndexError:
-            raise EmptyJSONFileError()
+            raise FileNotFoundError(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
+            The token for your discord bot (https://discord.com/developers/applications/your-app-id-here/bot)
+            The ID of your reddit bot (https://old.reddit.com/prefs/apps)
+            The secret for your reddit bot (same URL as above)
+            Your reddit username
+            Your reddit password
+
+            Until then this bot will not be able to function.
+            More information: https://github.com/moistpotato9873/moistpotatos-bot/wiki#developers---setting-up-the-bot''')
 
     def installDependencies(self, modules):
         """

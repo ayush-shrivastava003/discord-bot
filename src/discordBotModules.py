@@ -1,7 +1,7 @@
 import time
 import random
 import threading
-import os
+import socket
 import utilityFunctions
 
 try:
@@ -114,11 +114,13 @@ class discordBotFunctions():
         """
         Utility function.
 
-        Returns a string containing the number of embeds, hot posts, and the time the posts were last refreshed.
+        Returns a string containing the number of embeds, hot posts, the hostname, and the time the posts were last refreshed.
         """
-        return f'''{len(self.embeds)} embeds
+        return f'''
+    {len(self.embeds)} embeds
     {len(self.submissions)} hot posts
-    last refreshed @ {self.timeLastRefreshed}'''
+    last refreshed @ {self.timeLastRefreshed}
+    running on {socket.gethostname()}'''
 
     def startup(self):
         """
