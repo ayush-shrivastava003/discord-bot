@@ -8,11 +8,10 @@ import discordBotModules # if google is not installed, installDependencies will 
 try:
 	import discord
 	import praw
-	import tqdm
 
 except ImportError: # one of the modules above hasn't been installed
 	print(f"Import Error at {__file__}")
-	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm'])
+	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw'])
 
 import praw # if it's not imported again it throws a NameError
 
