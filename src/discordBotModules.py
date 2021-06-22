@@ -2,14 +2,17 @@ import time
 import random
 import threading
 import os
-import tqdm
 import utilityFunctions
 
 try:
     import googlesearch
+    import tqdm
 
 except ImportError:
-    utilityFunctions.botUtilityFunctions().installDependencies(['beautifulsoup4', 'google'])
+    print(f"Import Error at {__file__}")
+    utilityFunctions.botUtilityFunctions().installDependencies(['beautifulsoup4', 'google', 'tqdm'])
+
+import tqdm
 
 class discordBotFunctions():
     def __init__(self, reddit, discord):
@@ -44,7 +47,6 @@ class discordBotFunctions():
             print("Filtering submissions...")
             for posts in self.submissions[i]:
                 if posts.stickied or "v.redd.it" in posts.url: #removing all pinned posts or non-gifs/images
-                    print("sticky")
                     self.submissions[i].remove(posts)
 
             print("Constructing embeds...")
@@ -58,6 +60,8 @@ class discordBotFunctions():
                 embed.set_image(url = self.post.url)
                 embed.set_footer(text = f'{self.post.score} ⬆️ | {len(self.post.comments)} 💬')
                 self.embeds.append(embed)
+
+            print(f"...done ({i+1}/{len(self.subreddits)})")
 
         self.post = 0
 

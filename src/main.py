@@ -10,9 +10,11 @@ try:
 	import praw
 	import tqdm
 
-except ImportError as e: # one of the modules above hasn't been installed
-	print(e)
-	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm']) # beautifulsoup4 is a dependency for google
+except ImportError: # one of the modules above hasn't been installed
+	print(f"Import Error at {__file__}")
+	utilityFunctions.botUtilityFunctions().installDependencies(['discord', 'praw', 'tqdm'])
+
+import praw # if it's not imported again it throws a NameError
 
 prefix = '.'
 client = discord.Client()
@@ -67,6 +69,12 @@ async def on_message(msg):
 
 		elif msg.content.startswith("stfu"): # just type "stfu" on discord
 			await msg.channel.send(f"{msg.author.mention} https://tenor.com/view/stfu-no-one-cares-gif-21262364")
+			
+		elif msg.content.startswith(prefix + 'exit'):
+			await msg.channel.send("Are you sure you want to take down the bot? y/n")
+
+		elif msg.content.startswith('y'):
+			sys.exit()
 
 		# elif msg.content.startswith(prefix + "work"):
 		# 	pass

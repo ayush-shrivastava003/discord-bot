@@ -31,6 +31,7 @@ class botUtilityFunctions():
         Reddit bot secret
         Reddit username
         Reddit password
+        Reddit user agent
 
         Note that this file is in .gitignore, but the file is created automatically. You will have to include the information yourself, however.
         """
@@ -79,6 +80,8 @@ class botUtilityFunctions():
         for module in modules:
             print(f'Installing {module}...')
             os.system(f'{name} -m pip install {module} -q')
+
+        print("Finished installing modules.\n")
 
     def errorOccured(self, author, errorMessage):
         """
