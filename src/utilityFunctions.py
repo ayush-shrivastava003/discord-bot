@@ -102,43 +102,32 @@ class botUtilityFunctions():
         return f'''Something went wrong! Here's the full error message:
         `{str(errorMessage)}`\n
 Please submit a bug report here if you're unsure of how to fix the problem: https://forms.gle/owaquH8JPGzhM1DJ6
+Or, if you have a GitHub profile, create an issue at the repository linked below.
 GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki#faq'''
 
-    # def getHours(self):
-    #     """
-    #     Attempting to manually get number of hours instead of using datetime.
-    #     """
-        
-    #     now = time.time()
-    #     # Years = now / self.year
-    #     # print("years: " + str(Years))
-    #     # Weeks = now / self.week
-    #     # print("weeks: " + str(Weeks))
-    #     # Days = now / self.day
-    #     # print("days: " + str(Days))
-    #     # print(self.hour)
-    #     # Hours = now / self.hour
-    #     # print("hours: " + str(Hours))
-    #     # Minutes = now / self.minute
-    #     # print("minutes " + str(Minutes))
-    #     # Seconds = now / self.second
-    #     # print("seconds: " + str(Seconds))
+    def dumpToJSON(self, authorID: str, newWorkData:dict=None, newData:dict=None):
+        with open(self.file, 'r+') as config:
+            JSONContent = self.retrieveJSONContent()
+            
+            if authorID not in JSONContent["user_info"]: # user is not in our records so we need to create a new 
+                print("user not found")
+                newData = {"work_info": {"hours": 0, "job": "none"}}
+                JSONContent["user_info"][authorID] = newData
+            
+            else:
+                print("nvm user is there")
 
-    #     # getHours = now-Hours
+            if newWorkData is not None:
+                JSONContent["user_info"][authorID]["work_info"].update(newWorkData)
+                
+            if newData is not None: # other data that is not work details
+                JSONContent["user_info"][authorID].update(newData)
+            
+            print(JSONContent["user_info"][authorID])
+            config.seek(0)
+            json.dump(JSONContent, config)
+            config.truncate()
 
-    #     # print(now)
-    #     # print(getHours)
-
-    #     # hours = self.refreshHour*self.hour
-    #     # print(hours)
-    #     # midnight = now-self.day-self.hour-self.minute-self.second-self.millisecond
-    #     # print("midnight: " + str(midnight / self.year / self.week / self.day / self.hour / self.minute / self.second / self.millisecond))
-    #     # nextRefreshHour = midnight + hours
-    #     # print("next refresh hour: " + str(nextRefreshHour))
-        
-    #     # timeToNextRefresh = nextRefreshHour-now
-    #     # print(f"now: {now}")
-    #     # print(f"next time to refresh: {str(timeToNextRefresh)} sec ({str(timeToNextRefresh / self.hour)} hrs)")
 
     def getNextRefreshTime(self):
         """

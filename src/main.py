@@ -19,7 +19,7 @@ prefix = '.'
 client = discord.Client()
 botUtility = utilityFunctions.botUtilityFunctions()
 # workFunctions = workFunctions.workFunctions()
-JSONContent = botUtility.retrieveJSONContent()
+JSONContent = botUtility.retrieveJSONContent()["bot_info"]
 user = JSONContent["user_id"]
 reddit = praw.Reddit(
 	client_id = JSONContent["client_id"],
@@ -74,9 +74,9 @@ async def on_message(msg):
 			await msg.channel.send(f":ping_pong: Pong! **{client.latency}ms**")
 			
 		elif msg.content.startswith(prefix + 'exit'):
-			await msg.channel.send("enter the file location for the bot to confirm")
+			await msg.author.send("enter the file location for the bot to confirm")
 
-		elif msg.content.startswith(__file__):
+		elif msg.content.startswith(__file__) and not msg.guild:
 			await msg.channel.send("bot shutting down...")
 			await user.send("bot got shut down LLLLL :clown:")
 			sys.exit()
