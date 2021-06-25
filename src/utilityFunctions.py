@@ -35,12 +35,10 @@ class botUtilityFunctions():
 
         Note that this file is in .gitignore, but the file is created automatically. You will have to include the information yourself, however.
         """
-        try:
-            fetchedPosts = open(self.file, 'r')
-        except FileNotFoundError:
-            fetchedPosts = open(self.file, 'w+') #gotta make a file if there wasn't one already
+        if not os.path.exists(self.file):
+            config = open(self.file, "w+")
+            config.close()
 
-            # more descriptive error msg
             raise FileNotFoundError(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
             The token for your discord bot (https://discord.com/developers/applications/your-app-id-here/bot)
             The ID of your reddit bot (https://old.reddit.com/prefs/apps)
@@ -51,17 +49,11 @@ class botUtilityFunctions():
             Until then this bot will not be able to function.
             More information: https://github.com/moistpotato9873/moistpotatos-bot/wiki#developers---setting-up-the-bot''')
 
-        char = fetchedPosts.read(1) #check if there even was anything in the file
-        fetchedPosts.close()
-
         with open(self.file, 'r') as config:
-            data = []
-            for line in config:
-                data.append(json.loads(line))
-            config.close()
+            data = json.loads(config.read())
 
         try:
-            return data[0]
+            return data
         
         except IndexError:
             raise FileNotFoundError(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
@@ -111,8 +103,8 @@ GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/w
             
             if authorID not in JSONContent["user_info"]: # user is not in our records so we need to create a new 
                 print("user not found")
-                newData = {"work_info": {"hours": 0, "job": "none"}}
-                JSONContent["user_info"][authorID] = newData
+                userTemplate = {"work_info": {"hours": 0, "job": "none"}}
+                JSONContent["user_info"][authorID] = userTemplate
             
             else:
                 print("nvm user is there")
