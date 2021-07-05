@@ -2,23 +2,26 @@ import time
 import random
 import threading
 import socket
+import requests
 import utilityFunctions
 
 try:
     import googlesearch
+    from bs4 import BeautifulSoup
     import tqdm
 
 except ImportError:
     print(f"Import Error at {__file__}")
-    utilityFunctions.botUtilityFunctions().installDependencies(['beautifulsoup4', 'google', 'tqdm'])
+    utilityFunctions.botUtilityFunctions().installDependencies(['bs4', 'google', 'tqdm'])
 
 import tqdm
+utilFuncs = utilityFunctions.botUtilityFunctions()
 
 class discordBotFunctions():
     def __init__(self, reddit, discord):
-        self.GreetList = [' Greetings!', ' Hello!', ' Hi!', ' Hey!']
+        self.GreetList = ['Greetings!', 'Hello!', 'Hi!', 'Hey!']
         self.prefix = '.'
-        self.version = '0.94'
+        self.version = '0.95'
         self.subreddits = ['memes', 'me_irl', 'dankmemes']
         self.embeds = []
         self.submissions = []
@@ -27,7 +30,6 @@ class discordBotFunctions():
         self.threads = []
         self.redditObj = reddit
         self.discord = discord
-        self.utilFuncs = utilityFunctions.botUtilityFunctions()
 
     def fetch(self, stop):
         """
@@ -58,6 +60,7 @@ class discordBotFunctions():
                     url = f"https://reddit.com/{self.post.id}"
                 )
                 embed.set_image(url = self.post.url)
+                embed.set_author(name=self.post.author.id, icon_url=self.post.author.icon_img)
                 embed.set_footer(text = f'{self.post.score} ⬆️ | {len(self.post.comments)} 💬')
                 self.embeds.append(embed)
 
@@ -67,36 +70,49 @@ class discordBotFunctions():
 
 
         if not stop.is_set():
-            self.threads.append(threading.Timer(self.utilFuncs.getNextRefreshTime(), self.fetch, [stop]).start()) #set a timer for 8 hours to refresh the posts
+            self.threads.append(threading.Timer(utilFuncs.getNextRefreshTime(), self.fetch, [stop]).start()) #set a timer for 8 hours to refresh the posts
 
-    def help(self):
+    def help(self, authorName, authorPFP):
         """
-        Returns a list of commands for the bot.
+        Returns a list of commands for the bot in the form of an embed.
         """
-        print(f'{time.asctime()}: We received "{self.prefix}help" command!')
-        return f'''Commands for version `{self.version}`:
-        **{self.prefix}help** - sends this list of commands
-        **{self.prefix}greet** - says hello
-        **{self.prefix}search** - finds and retrieves ten urls based on your search query
-        **{self.prefix}reddit** - gets a meme from r/memes on Reddit'''
+        embed = self.discord.Embed(title=f".help - all commands for version {self.version}", )
+        embed.set_author(name=authorName, icon_url=authorPFP)
+        embed.add_field(name=f"{self.prefix}help", value="sends this list of commands", inline=True)
+        embed.add_field(name=f"{self.prefix}greet", value="says hello", inline=True)
+        embed.add_field(name=f"{self.prefix}search [query]", value="finds and retrieves ten urls based on your search query", inline=True)
+        embed.add_field(name=f"{self.prefix}rdt", value="gets a meme from r/memes on Reddit", inline = True)
+        embed.add_field(name=f"{self.prefix}ping", value="shows the bot's ping", inline = True)
+        embed.add_field(name=f"{self.prefix}workas [job]", value = "assigns you a job", inline=True)
+        embed.add_field(name=f"{self.prefix}work", value="complete a small task to get coins, which you can spend in the shop", inline=True)
+        embed.add_field(name=f"{self.prefix}bal", value="check your wallet and bank", inline=True)
+        embed.add_field(name=f"{self.prefix}dep [amount]", value="deposit some money into your bank", inline=True)
+        embed.set_footer(text="shop coming soon || updates on the bot -> https://github.com/moistpotato9873/moistpotatos-bot")
+        return embed
 
     def greet(self):
         """
         Greets the user with a random message.
         """
-        print(f'{time.asctime()}: We received the "{self.prefix}greet" command!')
         return self.GreetList[random.randrange(0, 4, 1)] #randomly select a greeting message
 
-    def search(self, query):
+    async def search(self, query, userAgent, msg):
         """
         Searches Google with the user's query. Returns a list with the first ten results.
         """
         fetchedURLS = []
-        print(f'{time.asctime()}: We received the "{self.prefix}search" command!')
-        for search_results in googlesearch.search(query, tld="com", num=10, stop=10, pause=2):
-            fetchedURLS.append(search_results) #add all ten search results to the to-be-returned list
+        titles = []
+        await msg.edit(content="Searching Google...")
+        results = googlesearch.search(query, tld="com", num=10, stop=10, pause=2)
+        await msg.edit(content="Extracting titles from HTML documents...")
+        for search_results in results:
+            fetchedURLS.append(search_results)
+            req = requests.get(search_results, headers={"User-Agent": userAgent})
+            text = BeautifulSoup(req.text, "html.parser")
+            title = text.title.text
+            titles.append(title)
 
-        return [f'''Here are ten URLS based on your search `{query}`:''', fetchedURLS]
+        return [fetchedURLS, titles]
 
     def reddit(self):
         """

@@ -11,6 +11,18 @@ class botUtilityFunctions():
         os.makedirs(path, exist_ok=True)
         self.file = path + os.sep + 'config.json'
 
+        self.configTemplate = {
+                                "bot_info": {
+                                    "token": "none",
+                                    "username": "none",
+                                    "password": "none",
+                                    "client_id": "none",
+                                    "client_secret": "none",
+                                    "user_agent": "none"
+                                },
+                                "user_info": {}
+                            }
+
         # units of time in milliseconds
         self.millisecond = 1/1000
         self.second = 1
@@ -22,7 +34,7 @@ class botUtilityFunctions():
 
         self.refreshHour = 16
 
-    def retrieveJSONContent(self):
+    def retrieveJSONContent(self, key=None):
         """
         Reads a JSON file for:
 
@@ -37,6 +49,7 @@ class botUtilityFunctions():
         """
         if not os.path.exists(self.file):
             config = open(self.file, "w+")
+            json.dump(self.configTemplate, self.file)
             config.close()
 
             raise FileNotFoundError(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
@@ -53,18 +66,16 @@ class botUtilityFunctions():
             data = json.loads(config.read())
 
         try:
-            return data
-        
-        except IndexError:
-            raise FileNotFoundError(f'''There was no JSON file found at "{self.file}". One has automatically been made for you, but you need to include some of your own information:
-            The token for your discord bot (https://discord.com/developers/applications/your-app-id-here/bot)
-            The ID of your reddit bot (https://old.reddit.com/prefs/apps)
-            The secret for your reddit bot (same URL as above)
-            Your reddit username
-            Your reddit password
+            if key:
+                return data[key]
 
-            Until then this bot will not be able to function.
-            More information: https://github.com/moistpotato9873/moistpotatos-bot/wiki#developers---setting-up-the-bot''')
+            else:
+                return data
+        
+        except KeyError as e:
+            print("key error: " + str(e))
+            self.dumpToJSON(key)
+            return False
 
     def installDependencies(self, modules):
         """
@@ -97,25 +108,20 @@ Please submit a bug report here if you're unsure of how to fix the problem: http
 Or, if you have a GitHub profile, create an issue at the repository linked below.
 GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/wiki#faq'''
 
-    def dumpToJSON(self, authorID: str, newWorkData:dict=None, newData:dict=None):
+    def dumpToJSON(self, authorID: str, newWorkData:dict=None, newMoneyData:dict=None):
         with open(self.file, 'r+') as config:
             JSONContent = self.retrieveJSONContent()
             
             if authorID not in JSONContent["user_info"]: # user is not in our records so we need to create a new 
-                print("user not found")
-                userTemplate = {"work_info": {"hours": 0, "job": "none"}}
+                userTemplate = {"work_info": {"hours": 0, "job": "none", "cpstring": "none", "lastWorkCmd": True}, "money_info": {"wallet": 0, "bank": 0, "bankSpace": 1000}}
                 JSONContent["user_info"][authorID] = userTemplate
-            
-            else:
-                print("nvm user is there")
 
             if newWorkData is not None:
                 JSONContent["user_info"][authorID]["work_info"].update(newWorkData)
                 
-            if newData is not None: # other data that is not work details
-                JSONContent["user_info"][authorID].update(newData)
+            if newMoneyData is not None: # other data that is not work details
+                JSONContent["user_info"][authorID]["money_info"].update(newMoneyData)
             
-            print(JSONContent["user_info"][authorID])
             config.seek(0)
             json.dump(JSONContent, config)
             config.truncate()
@@ -145,3 +151,7 @@ GitHub page for more info: https://github.com/moistpotato9873/moistpotatos-bot/w
         self.refreshHour += 8
 
         return timeToNextRefresh
+
+    def splitList(self, list):
+        listHalf = len(list)//2
+        return list[:listHalf], list[listHalf:]
