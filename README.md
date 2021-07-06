@@ -1,8 +1,8 @@
-# moistpotato's bot
+# discord bot
 
 (from the [wiki](https://github.com/moistpotato9873/wiki))
 
-moistpotato's bot is a template for new programmers like myself to program a Discord bot! It's written entirely in Python for simplicity. It features basic functions, a connection to the Reddit and Google APIs, and is designed to be as user-friendly as possible. This will cover everything you need to know about the bot.
+This is a template for new programmers like myself to program a Discord bot! It's written entirely in Python for simplicity. It features basic functions, a connection to the Reddit and Google APIs, and is designed to be as user-friendly as possible. This will cover everything you need to know about the bot.
 
 Invite the bot [here](https://discord.com/oauth2/authorize?client_id=806934438738264114&scope=bot) 
 
