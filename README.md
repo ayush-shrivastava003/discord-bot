@@ -7,10 +7,25 @@ moistpotato's bot is a template for new programmers like myself to program a Dis
 Invite the bot [here](https://discord.com/oauth2/authorize?client_id=806934438738264114&scope=bot) 
 
 ## table of contents
+* [latest release notes](https://github.com/moistpotato9873/moistpotatos-bot/wiki/#latest-release-notes)
 * [developers - setting up the bot](https://github.com/moistpotato9873/moistpotatos-bot/wiki/#developers---setting-up-the-bot)
 * [faq](https://github.com/moistpotato9873/moistpotatos-bot/wiki/#faq)
 * [rules for use](https://github.com/moistpotato9873/moistpotatos-bot/wiki/#rules-for-use)
 * [credits](https://github.com/moistpotato9873/moistpotatos-bot/wiki/#credits)
+
+## latest release notes
+
+v0.9.0 is here! This is the update just before the fully-ready release, and I've added a lot. This update was focussed on currencies, working, and aesthetics. In order for that to work, user data can now reliably be stored, queried, and updated in `config.json`. In addition for developers looking to modify this code, I've significantly improved code readability by registering commands in a *much* easier way. Here's a short bullet list of the changes:
+
+* Complete rework of command registration for bots.
+* Query and edit user data in `config.json`.
+* Work function (currently only one task to complete).
+* Assign yourself a job.
+* Check your bank and wallet.
+* Deposit money into your bank.
+* Improved search command by organizing results into an embed.
+* Improved help command by organizing commands into an embed.
+* Improved ping command by rounding the milliseconds.
 
 ## developers - setting up the bot
 
