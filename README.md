@@ -15,7 +15,9 @@ Invite the bot [here](https://discord.com/oauth2/authorize?client_id=80693443873
 
 ## latest release notes
 
-v0.9.0 is here! This is the update just before the fully-ready release, and I've added a lot. This update was focussed on currencies, working, and aesthetics. In order for that to work, user data can now reliably be stored, queried, and updated in `config.json`. In addition for developers looking to modify this code, I've significantly improved code readability by registering commands in a *much* easier way. Here's a short bullet list of the changes:
+(not complete, but i wanted to see what people thought of the new stuff before i continute and finish up the update)
+
+v0.9.0 beta is here! This is the update just before the fully-ready release, and I've added a lot. This update was focussed on currencies, working, and aesthetics. In order for that to work, user data can now reliably be stored, queried, and updated in `config.json`. In addition for developers looking to modify this code, I've significantly improved code readability by registering commands in a *much* easier way. Here's a short bullet list of the changes:
 
 * Complete rework of command registration for bots.
 * Query and edit user data in `config.json`.
@@ -25,7 +27,10 @@ v0.9.0 is here! This is the update just before the fully-ready release, and I've
 * Deposit money into your bank.
 * Improved search command by organizing results into an embed.
 * Improved help command by organizing commands into an embed.
+* Improved reddit command by including an author in the embed, the ability to use the `.rdt` alias, and adding r/me_irl and r/dankmemes subreddits.
 * Improved ping command by rounding the milliseconds.
+
+This update is not complete, but rather a test to see what I need to improve. It'll be fully ready once I include a limit to working, more jobs, more tasks for working, a shop to buy items, and a withdrawl system.
 
 ## developers - setting up the bot
 
