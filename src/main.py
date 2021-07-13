@@ -204,6 +204,8 @@ async def on_message(msg):
 			await msg.channel.send(f"{msg.author.mention} https://tenor.com/view/stfu-no-one-cares-gif-21262364")
 
 		elif client.user.mentioned_in(msg):
+			if "@everyone" in msg.content or "@here" in msg.content:
+				return
 			await msg.channel.send(f"{msg.author.mention} TF R U DOING PINGING A BOT https://tenor.com/view/bronwie-shut-up-bronwie-gif-19682564")
 
 		elif msg.content == __file__ and not msg.guild:
