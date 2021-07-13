@@ -9,7 +9,7 @@ import workFunctions
 try:
 	import discord
 	from discord.ext import commands
-	from discord.ext.commands.errors import MissingRequiredArgument
+	from discord.ext.commands.errors import CommandNotFound
 	
 	import praw
 
@@ -43,6 +43,8 @@ async def on_ready():
 
 @client.event
 async def on_command_error(ctx, error):
+	if isinstance(error, CommandNotFound):
+		return
 	await ctx.author.send(botUtility.errorOccured(ctx.author, error))
 
 @client.command()
