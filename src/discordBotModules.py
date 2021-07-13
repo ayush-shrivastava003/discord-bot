@@ -103,11 +103,11 @@ class discordBotFunctions():
         fetchedURLS = []
         titles = []
         await msg.edit(content="Searching Google...")
-        results = googlesearch.search(query, tld="com", num=10, stop=10, pause=2)
-        await msg.edit(content="Extracting titles from HTML documents...")
-        for search_results in results:
-            fetchedURLS.append(search_results)
-            req = requests.get(search_results, headers={"User-Agent": userAgent})
+        results = list(googlesearch.search(query, tld="com", num=10, stop=10, pause=2))
+        for result in results:
+            await msg.edit(content=f"Extracting titles from HTML documents... ({results.index(result)}/{len(results)})")
+            fetchedURLS.append(result)
+            req = requests.get(result, headers={"User-Agent": userAgent})
             text = BeautifulSoup(req.text, "html.parser")
             title = text.title.text
             titles.append(title)
