@@ -56,8 +56,15 @@ async def greet(ctx):
 	await ctx.channel.send(f"{ctx.author.mention} {botFunctions.greet()}")
 
 @client.command()
-async def search(ctx, query=None):
-	if not query:
+async def search(ctx, *args):
+	query = ""
+
+	for arg in args:
+		query += " " + arg
+
+	query = query[1:]
+
+	if query == "":
 		await ctx.channel.send("hey dummy you forgot the search query")
 
 	else:
