@@ -1,4 +1,3 @@
-
-res/
 src/__pycache__
 .google-cookie
+src/token.txt
